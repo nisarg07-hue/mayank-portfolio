@@ -11,50 +11,60 @@ export default function VideoPreview({ src, isHovered }: VideoPreviewProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [hasAttempted, setHasAttempted] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !src) return;
+    if (!video || !src || hasError) return;
 
     if (isHovered) {
-      // Load src only on first hover
       if (!hasAttempted) {
         video.src = src;
         setHasAttempted(true);
         video.load();
-        video.oncanplaythrough = () => {
+        
+        video.oncanplay = () => {
           setHasLoaded(true);
-          video.play().catch(() => {
-            // Autoplay blocked — silently fail, thumbnail stays visible
+          video.play().catch((err) => {
+            console.warn("Autoplay blocked or playback failed:", err);
           });
         };
+        
         video.onerror = () => {
-          // Video file doesn't exist yet — silently fail
+          console.error(`Failed to load video: ${src}`);
+          setHasError(true);
           setHasLoaded(false);
         };
       } else if (hasLoaded) {
-        video.play().catch(() => {});
+        video.play().catch((err) => console.warn("Playback failed:", err));
       }
     } else {
-      // Mouse left — pause and reset
-      video.pause();
-      video.currentTime = 0;
+      if (hasLoaded) {
+        video.pause();
+        video.currentTime = 0;
+      }
     }
-  }, [isHovered, src, hasAttempted, hasLoaded]);
+  }, [isHovered, src, hasAttempted, hasLoaded, hasError]);
 
-  // Don't render if no src provided
   if (!src) return null;
 
   return (
-    <video
-      ref={videoRef}
-      muted
-      playsInline
-      loop
-      preload="none" // CRITICAL — do not load until hover
-      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-      style={{ opacity: isHovered && hasLoaded ? 1 : 0 }}
-      aria-hidden="true"
-    />
+    <>
+      <video
+        ref={videoRef}
+        muted
+        playsInline
+        loop
+        preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+        style={{ opacity: isHovered && hasLoaded && !hasError ? 1 : 0 }}
+        aria-hidden="true"
+      />
+      {hasError && isHovered && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-10">
+          <span className="text-xs tracking-wider uppercase text-zinc-400">Video Unavailable</span>
+        </div>
+      )}
+    </>
   );
 }

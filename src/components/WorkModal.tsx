@@ -3,6 +3,7 @@
 import type { WorkItem } from "@/lib/work";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useEffect, useMemo, useState } from "react";
+import { useModalLock } from "@/hooks/useModalLock";
 
 export function WorkModal({
   item,
@@ -23,20 +24,13 @@ export function WorkModal({
     return () => window.clearTimeout(t);
   }, [reduce]);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") requestClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   function requestClose() {
     if (reduce) return onClose();
     setOpen(false);
     window.setTimeout(onClose, 220);
   }
+
+  useModalLock(open, requestClose);
 
   return (
     <div

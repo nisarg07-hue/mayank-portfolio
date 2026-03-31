@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useModalLock } from "@/hooks/useModalLock";
 
 interface ReelModalProps {
   isOpen: boolean;
@@ -10,26 +10,7 @@ interface ReelModalProps {
 }
 
 export function ReelModal({ isOpen, onClose, embedUrl }: ReelModalProps) {
-  useEffect(() => {
-    function handleEsc(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    if (isOpen) {
-      document.addEventListener("keydown", handleEsc);
-    }
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [isOpen, onClose]);
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+  useModalLock(isOpen, onClose);
 
   if (!isOpen) return null;
 

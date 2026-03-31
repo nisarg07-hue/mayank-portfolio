@@ -5,8 +5,11 @@ import { Container } from "../Container";
 import { SectionHeading } from "../SectionHeading";
 import { Reveal } from "../motion/Reveal";
 
-const email = "msingh83904@gmail.com";
-const phone = "7988736877";
+import ContactForm from "../ui/ContactForm";
+
+const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "[Email Not Configured]";
+const phone = process.env.NEXT_PUBLIC_CONTACT_PHONE || "[Phone Not Configured]";
+const instagram = process.env.NEXT_PUBLIC_INSTAGRAM_URL || "#";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -24,7 +27,7 @@ export function Contact() {
   return (
     <section id="contact" className="py-24">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-10 items-end">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-10 items-start">
           <div className="lg:col-span-7">
             <Reveal>
               <SectionHeading
@@ -38,6 +41,11 @@ export function Contact() {
               >
                 Available for premium edits and ongoing collaborations.
               </SectionHeading>
+            </Reveal>
+            <Reveal delayMs={100}>
+              <div className="mt-12 w-full max-w-xl">
+                <ContactForm />
+              </div>
             </Reveal>
           </div>
           <div className="lg:col-span-5">
@@ -66,7 +74,7 @@ export function Contact() {
                     Social
                   </div>
                   <a
-                    href="https://instagram.com"
+                    href={instagram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 btnPrimary rounded-full bg-zinc-100 text-black px-7 py-4 text-xs tracking-[0.18em] uppercase hover:bg-white transition-colors font-medium mt-2"

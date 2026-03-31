@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import "./video-portfolio.css";
 
 /* ═══════════════════════════════════════════════════════════
@@ -264,8 +266,8 @@ function VideoCard({
             setThumbUrl(dataUrl);
           }
         }
-      } catch {
-        // CORS or other error - keep SVG fallback
+      } catch (err) {
+        console.warn("Failed to generate thumbnail due to CORS or other error:", err);
       }
       tempVideo.removeEventListener("seeked", onSeeked);
       tempVideo.src = "";
@@ -539,46 +541,48 @@ function CategorySection({
 
 /* Renders the specific grid layout per category */
 function renderCategoryGrid(category: string, cards: VideoCardData[], onOpenModal: (card: VideoCardData) => void) {
+  if (!cards || cards.length === 0) {
+    return <div className="text-zinc-500 py-10 px-4">No videos in this category yet.</div>;
+  }
+
   switch (category) {
     case "gym":
       return (
         <>
-          {/* Hero pair: 58/42 */}
           <div className="sw-gym-hero">
-            <VideoCard card={cards[0]} index={0} onOpenModal={onOpenModal} />
-            <VideoCard card={cards[1]} index={1} onOpenModal={onOpenModal} />
+            {cards[0] && <VideoCard card={cards[0]} index={0} onOpenModal={onOpenModal} />}
+            {cards[1] && <VideoCard card={cards[1]} index={1} onOpenModal={onOpenModal} />}
           </div>
-          {/* Full-width feature */}
-          <div className="sw-feature">
-            <VideoCard card={cards[2]} index={2} onOpenModal={onOpenModal} />
-          </div>
-          {/* 3-col grid */}
-          <div className="sw-grid-3">
-            {cards.slice(3).map((c, i) => (
-              <VideoCard key={c.id} card={c} index={i + 3} onOpenModal={onOpenModal} />
-            ))}
-          </div>
+          {cards[2] && (
+            <div className="sw-feature">
+              <VideoCard card={cards[2]} index={2} onOpenModal={onOpenModal} />
+            </div>
+          )}
+          {cards.length > 3 && (
+            <div className="sw-grid-3">
+              {cards.slice(3).map((c, i) => (
+                <VideoCard key={c.id} card={c} index={i + 3} onOpenModal={onOpenModal} />
+              ))}
+            </div>
+          )}
         </>
       );
     case "realestate":
       return (
-        <>
-          {/* Single featured video */}
-          <div className="sw-feature">
-            <VideoCard card={cards[0]} index={0} onOpenModal={onOpenModal} />
-          </div>
-        </>
+        <div className={cards.length === 1 ? "sw-feature" : "sw-grid-3"}>
+          {cards.map((c, i) => (
+             <VideoCard key={c.id || i} card={c} index={i} onOpenModal={onOpenModal} />
+          ))}
+        </div>
       );
     case "gameplay":
       return (
-        <>
-          {/* Full-width feature */}
-          <div className="sw-gp-feature">
-            <VideoCard card={cards[0]} index={0} onOpenModal={onOpenModal} />
-          </div>
-        </>
+        <div className={cards.length === 1 ? "sw-gp-feature" : "sw-grid-3"}>
+          {cards.map((c, i) => (
+             <VideoCard key={c.id || i} card={c} index={i} onOpenModal={onOpenModal} />
+          ))}
+        </div>
       );
-
     default:
       return null;
   }
@@ -591,12 +595,29 @@ function renderCategoryGrid(category: string, cards: VideoCardData[], onOpenModa
 export function VideoPortfolio() {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [modalCard, setModalCard] = useState<VideoCardData | null>(null);
+  const [dbVideos, setDbVideos] = useState<VideoCardData[]>(VIDEO_DATA);
+
+  useEffect(() => {
+    const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      // As a convenience, if production DB is empty, keep showing hardcoded fallback to prevent blank sites
+      if (snapshot.empty) return;
+      
+      const data: VideoCardData[] = [];
+      snapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() } as VideoCardData);
+      });
+      setDbVideos(data);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   /* Group cards by category */
   const grouped = {
-    gym: VIDEO_DATA.filter((c) => c.category === "gym"),
-    realestate: VIDEO_DATA.filter((c) => c.category === "realestate"),
-    gameplay: VIDEO_DATA.filter((c) => c.category === "gameplay"),
+    gym: dbVideos.filter((c) => c.category === "gym"),
+    realestate: dbVideos.filter((c) => c.category === "realestate"),
+    gameplay: dbVideos.filter((c) => c.category === "gameplay"),
   };
 
   const visibleCategories =

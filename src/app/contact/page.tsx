@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
+import ContactForm from "@/components/ui/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact — Mayank Singh",
@@ -37,8 +38,8 @@ export default function ContactPage() {
                   <p className="text-xs tracking-[0.26em] uppercase text-zinc-500 mb-2">
                     Email
                   </p>
-                  <a href="mailto:msingh83904@gmail.com" className="text-lg font-medium hover:text-white transition-colors">
-                    msingh83904@gmail.com
+                  <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || ""}`} className="text-lg font-medium hover:text-white transition-colors">
+                    {process.env.NEXT_PUBLIC_CONTACT_EMAIL || "[Email Not Configured]"}
                   </a>
                 </div>
 
@@ -46,8 +47,8 @@ export default function ContactPage() {
                   <p className="text-xs tracking-[0.26em] uppercase text-zinc-500 mb-2">
                     Phone
                   </p>
-                  <a href="tel:7988736877" className="text-lg font-medium hover:text-white transition-colors">
-                    +91 7988736877
+                  <a href={`tel:${process.env.NEXT_PUBLIC_CONTACT_PHONE || ""}`} className="text-lg font-medium hover:text-white transition-colors">
+                    +91 {process.env.NEXT_PUBLIC_CONTACT_PHONE || "[Phone Not Configured]"}
                   </a>
                 </div>
 
@@ -56,7 +57,7 @@ export default function ContactPage() {
                     Socials
                   </p>
                   <div className="flex gap-4 text-xs tracking-[0.18em] uppercase text-zinc-400">
-                    <a className="hover:text-zinc-100 transition-colors inline-flex items-center gap-2 font-medium" href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                    <a className="hover:text-zinc-100 transition-colors inline-flex items-center gap-2 font-medium" href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || "#"} target="_blank" rel="noopener noreferrer">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                       Instagram
                     </a>
@@ -66,6 +67,12 @@ export default function ContactPage() {
             </div>
           </Reveal>
 
+          {/* RIGHT - form */}
+          <Reveal delayMs={150}>
+            <div className="bg-white/[0.02] border border-[color:var(--hairline)] p-8 rounded-3xl h-full">
+              <ContactForm />
+            </div>
+          </Reveal>
 
         </div>
       </Container>

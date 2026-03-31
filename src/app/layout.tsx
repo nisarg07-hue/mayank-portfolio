@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Bebas_Neue, DM_Sans, Space_Mono } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { SplineBackground } from "@/components/SplineBackground";
+import { SplineBackgroundClient } from "@/components/SplineBackgroundClient";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,7 +48,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${dmSans.variable} ${spaceMono.variable} antialiased bg-black text-zinc-100 selection:bg-zinc-100 selection:text-black`}
       >
-        <SplineBackground />
+        <SplineBackgroundClient />
         <div className="relative z-10">
           <Header />
           {children}

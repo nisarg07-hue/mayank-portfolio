@@ -13,7 +13,7 @@ export function HomeClient() {
       <ReelModal
         isOpen={reelOpen}
         onClose={() => setReelOpen(false)}
-        embedUrl="https://www.youtube.com/embed/dQw4w9WgXcQ"
+        embedUrl={process.env.NEXT_PUBLIC_HERO_REEL_URL || ""}
       />
     </>
   );
