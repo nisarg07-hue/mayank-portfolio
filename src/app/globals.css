@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #f2f2f2;
+  --muted: #a6a6a6;
+  --hairline: rgba(255, 255, 255, 0.12);
+  --accent: #bfc7d5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background-color: #000;
+  color: var(--foreground);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+*:focus-visible {
+  outline: 2px solid rgba(242, 242, 242, 0.5);
+  outline-offset: 3px;
+}
+
+/* Premium buttons */
+.btnPrimary {
+  position: relative;
+  overflow: hidden;
+}
+.btnPrimary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(0, 0, 0, 0) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transform: translateX(-120%);
+  transition: transform 900ms var(--ease-premium);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.btnPrimary:hover::after {
+  transform: translateX(120%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btnPrimary::after {
+    transition: none;
+    display: none;
+  }
+}
+
+/* Subtle cinematic grain (very low opacity). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+/* ─── Global Pointer Events for Spline Background Interaction ───────────── */
+/* We make almost everything 'none' so the mouse reaches SplineBackground.tsx
+   at z-index: 0. We then whitelist all actually interactive parts. */
+
+html,
+body,
+main,
+section,
+header,
+footer {
+  pointer-events: none;
+}
+
+/* Re-enable for interactive types */
+button,
+a,
+input,
+textarea,
+select,
+[role="button"],
+[role="tab"],
+[role="link"],
+.pointer-events-auto,
+.interactive-zone {
+  pointer-events: auto;
+}
+
+/* Ensure only interactive elements in header/footer are clickable, without blocking the full width */
+header a,
+header button,
+header [role="button"],
+footer a,
+footer button,
+footer [role="button"] {
+  pointer-events: auto;
+}
+
+/* Video portfolio section needs full interactivity for hover/tap previews */
+.selected-work,
+.selected-work * {
+  pointer-events: auto;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Motion tokens */
+:root {
+  --ease-premium: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-slow: 900ms;
+  --dur-med: 650ms;
+  --dur-fast: 300ms;
+}
+
+/* Scroll reveal */
+.reveal {
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--dur-med);
+  transition-timing-function: var(--ease-premium);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+.reveal[data-reveal="out"] {
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(6px);
+}
+.reveal[data-reveal="in"] {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Hero cutout to “hide” text behind portrait silhouette. */
+.heroCutout {
+  background: #000;
+  -webkit-mask-image: url("/portrait-mask.svg");
+  mask-image: url("/portrait-mask.svg");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* Hide Spline built-with watermark */
+#spline-wrapper a,
+#spline-wrapper div[style*="position: absolute"] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+spline-viewer {
+  --logo-visibility: none !important;
+}
+
