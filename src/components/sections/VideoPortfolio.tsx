@@ -24,7 +24,18 @@ type VideoCardData = {
 };
 
 const VIDEO_DATA: VideoCardData[] = [
-  // ── GYM (4) ──
+  // ── GYM (5) ──
+  {
+    id: "gym-0",
+    category: "gym",
+    subcategory: "Fitness Reel",
+    title: "WhatsApp Video 2026-03-30",
+    meta: "Vertical · Instagram Reels",
+    thumbnail: "/work/poster-1.svg",
+    videoSrc: "/work/WhatsApp Video 2026-03-30 at 7.18.26 PM (1).mp4",
+    duration: "Reel",
+    autoThumb: true,
+  },
   {
     id: "gym-1",
     category: "gym",
