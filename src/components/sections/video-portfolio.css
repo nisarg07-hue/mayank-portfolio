@@ -133,6 +133,7 @@
 .selected-work .sw-card-media {
   position: relative;
   width: 100%;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: #111;
   transition: transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
@@ -360,11 +361,11 @@
   gap: 16px;
   margin-bottom: 16px;
 }
-.selected-work .sw-gym-hero .sw-card-media { height: 420px; }
+.selected-work .sw-gym-hero .sw-card-media { height: auto; }
 
 /* Full-width cinematic feature */
 .selected-work .sw-feature { margin-bottom: 16px; }
-.selected-work .sw-feature .sw-card-media { height: 300px; }
+.selected-work .sw-feature .sw-card-media { height: auto; }
 
 /* 3-col grid */
 .selected-work .sw-grid-3 {
@@ -372,7 +373,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-.selected-work .sw-grid-3 .sw-card-media { height: 280px; }
+.selected-work .sw-grid-3 .sw-card-media { height: auto; }
 
 /* Real Estate layout: 1.5fr / 1fr */
 .selected-work .sw-re-layout {
@@ -381,11 +382,11 @@
   gap: 16px;
   margin-bottom: 16px;
 }
-.selected-work .sw-re-layout .sw-card-media { height: 360px; }
+.selected-work .sw-re-layout .sw-card-media { height: auto; }
 
 /* Gameplay feature */
 .selected-work .sw-gp-feature { margin-bottom: 16px; }
-.selected-work .sw-gp-feature .sw-card-media { height: 440px; }
+.selected-work .sw-gp-feature .sw-card-media { height: auto; }
 
 /* 4-col grid */
 .selected-work .sw-grid-4 {
@@ -393,7 +394,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
-.selected-work .sw-grid-4 .sw-card-media { height: 240px; }
+.selected-work .sw-grid-4 .sw-card-media { height: auto; }
 
 /* ─────────────────────────────────────────────────────────
    MID CTA
@@ -517,19 +518,19 @@
   .selected-work .sw-gym-hero {
     grid-template-columns: 1fr 1fr;
   }
-  .selected-work .sw-gym-hero .sw-card-media { height: 340px; }
+  .selected-work .sw-gym-hero .sw-card-media { height: auto; }
 
   .selected-work .sw-grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
-  .selected-work .sw-grid-4 .sw-card-media { height: 260px; }
+  .selected-work .sw-grid-4 .sw-card-media { height: auto; }
 
   .selected-work .sw-re-layout {
     grid-template-columns: 1fr 1fr;
   }
-  .selected-work .sw-re-layout .sw-card-media { height: 300px; }
+  .selected-work .sw-re-layout .sw-card-media { height: auto; }
 
-  .selected-work .sw-gp-feature .sw-card-media { height: 360px; }
+  .selected-work .sw-gp-feature .sw-card-media { height: auto; }
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -550,26 +551,26 @@
   .selected-work .sw-gym-hero {
     grid-template-columns: 1fr;
   }
-  .selected-work .sw-gym-hero .sw-card-media { height: 260px; }
+  .selected-work .sw-gym-hero .sw-card-media { height: auto; }
 
-  .selected-work .sw-feature .sw-card-media { height: 220px; }
+  .selected-work .sw-feature .sw-card-media { height: auto; }
 
   .selected-work .sw-grid-3 {
     grid-template-columns: 1fr;
   }
-  .selected-work .sw-grid-3 .sw-card-media { height: 240px; }
+  .selected-work .sw-grid-3 .sw-card-media { height: auto; }
 
   .selected-work .sw-re-layout {
     grid-template-columns: 1fr;
   }
-  .selected-work .sw-re-layout .sw-card-media { height: 260px; }
+  .selected-work .sw-re-layout .sw-card-media { height: auto; }
 
   .selected-work .sw-grid-4 {
     grid-template-columns: 1fr;
   }
-  .selected-work .sw-grid-4 .sw-card-media { height: 220px; }
+  .selected-work .sw-grid-4 .sw-card-media { height: auto; }
 
-  .selected-work .sw-gp-feature .sw-card-media { height: 280px; }
+  .selected-work .sw-gp-feature .sw-card-media { height: auto; }
 
   .selected-work .sw-section { padding-top: 60px; }
   .selected-work .sw-section-title { font-size: 28px; }
@@ -608,7 +609,7 @@
   .selected-work .sw-re-layout .sw-card-media,
   .selected-work .sw-grid-4 .sw-card-media,
   .selected-work .sw-gp-feature .sw-card-media {
-    height: 200px;
+    height: auto;
   }
 
   .selected-work .sw-section-title { font-size: 24px; }

@@ -545,47 +545,14 @@ function renderCategoryGrid(category: string, cards: VideoCardData[], onOpenModa
     return <div className="text-zinc-500 py-10 px-4">No videos in this category yet.</div>;
   }
 
-  switch (category) {
-    case "gym":
-      return (
-        <>
-          <div className="sw-gym-hero">
-            {cards[0] && <VideoCard card={cards[0]} index={0} onOpenModal={onOpenModal} />}
-            {cards[1] && <VideoCard card={cards[1]} index={1} onOpenModal={onOpenModal} />}
-          </div>
-          {cards[2] && (
-            <div className="sw-feature">
-              <VideoCard card={cards[2]} index={2} onOpenModal={onOpenModal} />
-            </div>
-          )}
-          {cards.length > 3 && (
-            <div className="sw-grid-3">
-              {cards.slice(3).map((c, i) => (
-                <VideoCard key={c.id} card={c} index={i + 3} onOpenModal={onOpenModal} />
-              ))}
-            </div>
-          )}
-        </>
-      );
-    case "realestate":
-      return (
-        <div className={cards.length === 1 ? "sw-feature" : "sw-grid-3"}>
-          {cards.map((c, i) => (
-             <VideoCard key={c.id || i} card={c} index={i} onOpenModal={onOpenModal} />
-          ))}
-        </div>
-      );
-    case "gameplay":
-      return (
-        <div className={cards.length === 1 ? "sw-gp-feature" : "sw-grid-3"}>
-          {cards.map((c, i) => (
-             <VideoCard key={c.id || i} card={c} index={i} onOpenModal={onOpenModal} />
-          ))}
-        </div>
-      );
-    default:
-      return null;
-  }
+  // Uniform 3-column grid for all categories to "reduce size" as requested
+  return (
+    <div className="sw-grid-3">
+      {cards.map((c, i) => (
+        <VideoCard key={c.id || i} card={c} index={i} onOpenModal={onOpenModal} />
+      ))}
+    </div>
+  );
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -675,20 +642,18 @@ export function VideoPortfolio() {
             />
           ))}
 
-          {/* ── Mid CTA (only show when gym is visible) ── */}
-          {(activeFilter === "all" || activeFilter === "gym") && (
-            <div className="sw-mid-cta">
-              <div>
-                <p className="sw-mid-cta-text">Love the gym work?</p>
-                <p className="sw-mid-cta-sub">
-                  Let&apos;s talk about your next project.
-                </p>
-              </div>
-              <a href="#contact" className="sw-cta-btn">
-                Book a Discovery Call →
-              </a>
+          {/* ── Mid CTA (Show after all videos) ── */}
+          <div className="sw-mid-cta">
+            <div>
+              <p className="sw-mid-cta-text">LOVE THE WORK?</p>
+              <p className="sw-mid-cta-sub">
+                Let&apos;s talk about your next project.
+              </p>
             </div>
-          )}
+            <a href="#contact" className="sw-cta-btn">
+              Book a Discovery Call →
+            </a>
+          </div>
         </div>
       </section>
 
